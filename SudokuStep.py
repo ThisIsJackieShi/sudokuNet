@@ -53,7 +53,9 @@ class SudokuStepNet(nn.Module):
 
         return loss, chosen
 
-    def chosen(self, x):
+    def chosen(self, x, mask):
+        x = F.softmax(x, dim=1)
+        x = x * mask
         return torch.argmax(x, dim=1)
 
 
@@ -118,7 +120,7 @@ def test_step(model, test_loader):
 
             for _ in range(9 * 9):
                 x = model(data)
-                chosen = model.chosen(x)
+                chosen = model.chosen(x, used_mask)
                 for n in range(data.size(dim=0)):
                     chosen_num = chosen[n] // 81
                     chosen_pos = chosen[n] % 81
