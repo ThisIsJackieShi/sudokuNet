@@ -32,9 +32,24 @@ For evaluation we just used the cross entropy method. Our network outputs a 9 ch
 
 For testing, since we have the 9 channels to represent different numbers to fill in, we just do argmax to find what number has the biggest chance to be the correct number for this grid. We do this both to the label and the output and compare the accuracy. Therefore the accuracy we defined is the accuracy of each grid being correct.
 
-## Results 
+## Results
+FC 999 to 999, Conv 9-16-32-16-9: 86%
 
-![alt text](https://keep.google.com/u/0/media/v2/1pLIEYxLpjFq8Uj5k2Reju-dhHvVL3gGOP4d0YWpHF9Zo2oxzdYcpFxlbdqFRN58/1r2niSi2sGrZhNsyuDLlSN0_E8VCszjfiL7H4pk2EaVZ6F3caXsJiaP06iZWiiA?sz=512&accept=image%2Fgif%2Cimage%2Fjpeg%2Cimage%2Fjpg%2Cimage%2Fpng%2Cimage%2Fwebp)
+![unnamed (1)](https://user-images.githubusercontent.com/47728497/146096424-0252fcbd-0776-429f-a10f-095ded3feb28.png)
+
+Conv 9-16-32-16-9: 64%
+
+![unnamed (2)](https://user-images.githubusercontent.com/47728497/146096425-ee32d052-afe1-4a97-b6be-17f7521e2881.png)
+
+Conv 9-16-32-16-9, FC 999 to 999: 83%
+
+![unnamed (3)](https://user-images.githubusercontent.com/47728497/146096426-fed3e550-dfe6-42b8-9940-dcac85523815.png)
+
+FC999 x3: 72%
+
+![unnamed (4)](https://user-images.githubusercontent.com/47728497/146096427-d5a64b34-f784-4c36-909c-1bdd1c89ca9f.png)
+
+
 
 ## Examples 
 
