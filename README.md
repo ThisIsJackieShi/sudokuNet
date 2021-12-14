@@ -14,7 +14,9 @@ We want to train a convolutional / LSTM network to solve Sudoku puzzles. The def
 
 ## Problem statement
 
-what are you trying to solve/do
+Sudoku is a famous game where you are given a 9x9 grid puzzle with some initial numbers and you need to fill out the blanks so that each row, column and 3x3 sub areas in the puzzle only have the number 1 to 9 appearing once within it. 
+
+The general N scaled Sudoku is thought to be NP-complete(1). That’s where we lay our initial inspiration for this project. We want to see what we can do when trying to solve NP problems using a neural network. The challenge is that NP problems are often without a fixed length of input, while the standard Sudoku is only constant 9x9. Finding standard Sudoku dataset is quite easy while it seems that a generalized Sudoku puzzle dataset is hard to find. Also, it is hard to train neural networks without a fixed size input and attain a good result. For the scale of this class’s final project, we thus decided to just get our feet wet in attempting to train a neural network on the standard Sudoku puzzles and see if and how it works well or not.
 
 ## Related work
 
