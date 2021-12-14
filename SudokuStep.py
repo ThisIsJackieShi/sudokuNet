@@ -63,12 +63,12 @@ def train_step(net, dataloader, epochs=1, lr=0.01, momentum=0.9, decay=0.0, verb
     # criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=lr, momentum=momentum, weight_decay=decay)
     for epoch in range(epochs):
-        sum_loss = 0.0
+        avg_loss = 0.0
         for i, batch in enumerate(dataloader, 0):
             # get the inputs; data is a list of [inputs, labels]
             inputs, labels = batch[0].to(DEVICE), batch[1].to(DEVICE)
             used_mask = torch.ones(size=(inputs.size(dim=0), 9*9*9), dtype=torch.float16, device=DEVICE)
-
+            sum_loss = 0.0
             for _ in range(9*9):
                 # zero the parameter gradients
                 optimizer.zero_grad()
@@ -84,21 +84,24 @@ def train_step(net, dataloader, epochs=1, lr=0.01, momentum=0.9, decay=0.0, verb
 
                 for n in range(inputs.size(dim=0)):
 
-                    chosen_num = chosen[n] // 81 + 1
+                    chosen_num = (chosen[n] // 81) + 1
                     chosen_pos = chosen[n] % 81
                     for num in range(9):
                         used_mask[n, chosen_pos + num*81] = 0
                     inputs[n, int(labels[n, chosen_pos]) - 1, chosen_pos // 9, chosen_pos % 9] = 1
 
-                print(loss.item())
-                # print statistics
-                losses.append(loss.item())
                 sum_loss += loss.item()
+                # print(loss.item())
+                # print statistics
+            losses.append(sum_loss)
+            print(f'[{i}] loss: {sum_loss}')
+            avg_loss += sum_loss
+
         if i % 100 == 99:  # print every 100 mini-batches
             if verbose:
                 print('[%d, %5d] loss: %.5f' %
-                      (epoch + 1, i + 1, sum_loss / 100))
-            sum_loss = 0.0
+                      (epoch + 1, i + 1, avg_loss / 100))
+            avg_loss = 0.0
     return losses
 
 
@@ -193,5 +196,5 @@ def main():
     train_step(net, train_data_loader)
     test_step(net, test_data_loader)
 
-
-main()
+if __name__ == '__main__':
+    main()
