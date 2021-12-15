@@ -33,20 +33,25 @@ For evaluation we just used the cross entropy method. Our network outputs a 9 ch
 For testing, since we have the 9 channels to represent different numbers to fill in, we just do argmax to find what number has the biggest chance to be the correct number for this grid. We do this both to the label and the output and compare the accuracy. Therefore the accuracy we defined is the accuracy of each grid being correct.
 
 ## Results
-FC 999 to 999, Conv 9-16-32-16-9: 86%
 
+We experimented with different structures of the neural network by changing the ordering of the fully connected layer and the convolutional layer.
+The worst result we got from these experiments is with only convolutional layers. The convolutional layers include 4 layers: from 9 to 16, 16 to 32, 32 to 16, 16 to 9 channels and each of them have kernel size of 3 and stride of 1. The choice of kernel size is related to the subarea part of Sudoku puzzles. These convolutional layers setup is the same for all four of our network structures. For only using the convolutional layer, the test accuracy ends up with 64%.
+It is expected for this model to be the lowest as it didn’t account the dependency of rows and columns in Sudoku but only the 9-grid subareas.
+Our model that performed the best is one fully connected layer from 9x9x9 to 9x9x9 and then the convolutional layers which have a test accuracy as large as 86%. This is because the model allows both the calculation of the dependency of rows and columns and 9-grid subareas. Interestingly, compared to a different model where we had convolutional layers first and then the fully connected layer, which is a more standard structure for usage of convolutional layers, this model with fully connected layer first is more accurate by 3%. The model with convolutional layers then fully connected layers has a test accuracy of 83%.
+This also makes sense because we should already processed our Sudoku matrix so we include the information of rows and columns dependency before we use convolutional layers that can account for the subarea dependency, but also lose some information of the relationships within rows and columns.
+We also tried the fully connected layers by itself but repeated 3 times.This one gives an accuracy of 72% which is still much better than the convolutional layers as fully connected layers can still learn subarea dependency of Sudoku. It is still not as good as using both kinds as convolutional layers are more specified in subarea dependency and are more efficient.
+
+
+FC 999 to 999, Conv 9-16-32-16-9: 86%
 ![unnamed (1)](https://user-images.githubusercontent.com/47728497/146096424-0252fcbd-0776-429f-a10f-095ded3feb28.png)
 
 Conv 9-16-32-16-9: 64%
-
 ![unnamed (2)](https://user-images.githubusercontent.com/47728497/146096425-ee32d052-afe1-4a97-b6be-17f7521e2881.png)
 
 Conv 9-16-32-16-9, FC 999 to 999: 83%
-
 ![unnamed (3)](https://user-images.githubusercontent.com/47728497/146096426-fed3e550-dfe6-42b8-9940-dcac85523815.png)
 
 FC999 x3: 72%
-
 ![unnamed (4)](https://user-images.githubusercontent.com/47728497/146096427-d5a64b34-f784-4c36-909c-1bdd1c89ca9f.png)
 
 
