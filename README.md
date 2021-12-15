@@ -67,3 +67,9 @@ images/text/live demo, anything to show off your work (note, demos get some extr
 ## Video
 
 a 2-3 minute long video where you explain your project and the above information
+
+## Citation
+
+1. Haythorpe M. Reducing the generalised Sudoku problem to the Hamiltonian cycle problem. AKCE International Journal of Graphs and Combinatorics. 2016;13(3):272-282. doi:10.1016/j.akcej.2016.10.001
+2. Park K. 1 million Sudoku games. Kaggle. https://www.kaggle.com/bryanpark/sudoku. Published December 29, 2016. Accessed December 14, 2021. 
+
