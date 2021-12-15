@@ -42,6 +42,8 @@ We used the dataset from Kaggle [2]. We converted the csv file to numpy and with
 
 The Kaggle dataset contains 1,000,000 Sudoku puzzles and solutions. We used the first 200,000 of puzzles and solutions for training and the following 10,000 for testing (since training on the entire dataset is too slow).
 
+<img src="dataset.jpg" alt="dataset" style="zoom: 67%;" />
+
 ### Network Structure
 
 We designed three types of networks.
@@ -50,7 +52,9 @@ The first kind is some simple convolutional networks that use some convolutional
 
 The second kind is a simple fully connected network. It flattens the 9x9x9 input to some hidden layers, then produces the 9x9x9 output, representing the value assigned to each number at position (i, j). Similarly, this network also only looks at the input once. The training and testing methods are similar to that of the convolutional network.
 
-The third kind is a step-by-step convolutional network. It takes a 9x9x9 input and produces a 729 vector, representing the value assigned to each number of each position. However, the loss calculation, the training, and the testing are quite different from that of the origin. For loss calculation, it is calculating whether the output number matches the solution at (i, j). For training, the loss calculation is repeated for 9*9 times. After each position has been picked, the mask is changed so that the position (i, j) is not considered in following iterations. The correct value at (i, j) is updated into the input, and the input is feed into the network again. For testing, a similar process is used. The main difference is that since there is no correct value at (i, j), the proposed value at (i, j) is updated into the input.
+The third kind is a step-by-step convolutional network. It takes a 9x9x9 input and produces a 729 vector, representing the value assigned to each number of each position. However, the loss calculation, the training, and the testing are quite different from that of the origin. For loss calculation, it is calculating whether the output number matches the solution at (i, j). For training, the loss calculation is repeated for 9*9 times. After each position has been picked, the mask is changed so that the position (i, j) is not considered in following iterations. The correct value at (i, j) is updated into the input, and the input is feed into the network again. For testing, a similar process is used. The main difference is that since there is no correct value at (i, j), the proposed value at (i, j) is updated into the input. See graph below.
+
+<img src="network_structure_step.jpg" alt="network structure" style="zoom: 33%;" />
 
 ### Tuning
 
@@ -64,12 +68,16 @@ For testing, since we have the 9 channels to represent different numbers to fill
 
 ## Results
 
-We experimented with different structures of the neural network by changing the ordering of the fully connected layer and the convolutional layer.
-The worst result we got from these experiments is with only convolutional layers. The convolutional layers include 4 layers: from 9 to 16, 16 to 32, 32 to 16, 16 to 9 channels and each of them have kernel size of 3 and stride of 1. The choice of kernel size is related to the subarea part of Sudoku puzzles. These convolutional layers setup is the same for all four of our network structures. For only using the convolutional layer, the test accuracy ends up with 64%.
-It is expected for this model to be the lowest as it didn’t account the dependency of rows and columns in Sudoku but only the 9-grid subareas.
+We experimented with different structures of the neural network by changing the ordering of the fully connected layer and the convolutional layer. 
+
+The worst result we got from these experiments is with only convolutional layers. The convolutional layers include 4 layers: from 9 to 16, 16 to 32, 32 to 16, 16 to 9 channels and each of them have kernel size of 3 and stride of 1. The choice of kernel size is related to the subarea part of Sudoku puzzles. These convolutional layers setup is the same for all four of our network structures. For only using the convolutional layer, the test accuracy ends up with 64%. It is expected for this model to be the lowest as it didn’t account the dependency of rows and columns in Sudoku but only the 9-grid subareas.
+
 Our model that performed the best is one fully connected layer from 9x9x9 to 9x9x9 and then the convolutional layers which have a test accuracy as large as 86%. This is because the model allows both the calculation of the dependency of rows and columns and 9-grid subareas. Interestingly, compared to a different model where we had convolutional layers first and then the fully connected layer, which is a more standard structure for usage of convolutional layers, this model with fully connected layer first is more accurate by 3%. The model with convolutional layers then fully connected layers has a test accuracy of 83%.
 This also makes sense because we should already processed our Sudoku matrix so we include the information of rows and columns dependency before we use convolutional layers that can account for the subarea dependency, but also lose some information of the relationships within rows and columns.
-We also tried the fully connected layers by itself but repeated 3 times.This one gives an accuracy of 72% which is still much better than the convolutional layers as fully connected layers can still learn subarea dependency of Sudoku. It is still not as good as using both kinds as convolutional layers are more specified in subarea dependency and are more efficient.
+
+We also tried the fully connected layers by itself but repeated 3 times. This one gives an accuracy of 72% which is still much better than the convolutional layers as fully connected layers can still learn subarea dependency of Sudoku. It is still not as good as using both kinds as convolutional layers are more specified in subarea dependency and are more efficient.
+
+As of the step-by-step network, the training is very slow. We eventually trained the network on 10,000 puzzles and got an accuracy of 48%. We suspect that this is because the network has not been fully trained. Unfortunately, we do not have a loss graph of this training. 
 
 
 FC 999 to 999, Conv 9-16-32-16-9: 86%
@@ -92,7 +100,27 @@ FC999 x3: 72%
 
 ## Examples 
 
-images/text/live demo, anything to show off your work (note, demos get some extra credit in the rubric)
+**Convolutional Network with Fully Connected Layer**
+
+Input:
+
+Output:
+
+Solution:
+
+**Step-by-Step Network**
+
+Input:
+
+<img src="example_step_input.jpg" alt="image-20211214192456583" style="zoom:67%;" />
+
+Output:
+
+<img src="example_step_output.jpg" alt="image-20211214192616637" style="zoom:67%;" />
+
+Solution:
+
+<img src="example_step_solution.jpg" alt="image-20211214192537108" style="zoom:67%;" />
 
 ## Video
 
@@ -103,9 +131,4 @@ a 2-3 minute long video where you explain your project and the above information
 1. Haythorpe M. Reducing the generalised Sudoku problem to the Hamiltonian cycle problem. *AKCE International Journal of Graphs and Combinatorics.* 2016;13(3):272-282. doi:10.1016/j.akcej.2016.10.001
 2. Park K. 1 million Sudoku games. Kaggle. https://www.kaggle.com/bryanpark/sudoku. Published December 29, 2016. Accessed December 14, 2021. 
 3. Verma, Shiva. “Solving Sudoku with Convolution Neural Network: Keras.” *Solving Sudoku with Convolution Neural Network | Keras*, Towards Data Science, 5 Oct. 2021, towardsdatascience.com/solving-sudoku-with-convolution-neural-network-keras-655ba4be3b11. 
-
-## Citation
-
-1. Haythorpe M. Reducing the generalised Sudoku problem to the Hamiltonian cycle problem. AKCE International Journal of Graphs and Combinatorics. 2016;13(3):272-282. doi:10.1016/j.akcej.2016.10.001
-2. Park K. 1 million Sudoku games. Kaggle. https://www.kaggle.com/bryanpark/sudoku. Published December 29, 2016. Accessed December 14, 2021. 
 

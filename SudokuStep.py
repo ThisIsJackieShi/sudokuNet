@@ -11,6 +11,8 @@ import h5py
 import sys
 import pandas as pd
 
+from sudoku_utils import sudoku2channel, channel2sudoku
+
 USE_CUDA = torch.cuda.is_available()
 DEVICE = 'cuda' if USE_CUDA else 'cpu'
 
@@ -59,19 +61,22 @@ class SudokuStepNet(nn.Module):
         return torch.argmax(x, dim=1)
 
 
-def train_step(net, dataloader, epochs=1, lr=0.01, momentum=0.9, decay=0.0, verbose=1):
+def train_step(net, dataloader, epochs=1, lr=0.01, momentum=0.9, decay=0.0, verbose=1, limit=None):
     net.to(DEVICE)
     losses = []
     # criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=lr, momentum=momentum, weight_decay=decay)
     for epoch in range(epochs):
-        avg_loss = 0.0
+        sum_loss = 0.0
         for i, batch in enumerate(dataloader, 0):
+            if limit and i >= limit:
+                break
+
             # get the inputs; data is a list of [inputs, labels]
             inputs, labels = batch[0].to(DEVICE), batch[1].to(DEVICE)
-            used_mask = torch.ones(size=(inputs.size(dim=0), 9*9*9), dtype=torch.float16, device=DEVICE)
-            sum_loss = 0.0
-            for _ in range(9*9):
+            used_mask = torch.ones(size=(inputs.size(dim=0), 9 * 9 * 9), dtype=torch.float16, device=DEVICE)
+
+            for _ in range(9 * 9):
                 # zero the parameter gradients
                 optimizer.zero_grad()
 
@@ -85,38 +90,36 @@ def train_step(net, dataloader, epochs=1, lr=0.01, momentum=0.9, decay=0.0, verb
                 optimizer.step()
 
                 for n in range(inputs.size(dim=0)):
-
-                    chosen_num = (chosen[n] // 81) + 1
+                    chosen_num = chosen[n] // 81 + 1
                     chosen_pos = chosen[n] % 81
                     for num in range(9):
-                        used_mask[n, chosen_pos + num*81] = 0
+                        used_mask[n, chosen_pos + num * 81] = 0
                     inputs[n, int(labels[n, chosen_pos]) - 1, chosen_pos // 9, chosen_pos % 9] = 1
 
-                sum_loss += loss.item()
-                # print(loss.item())
+                print(loss.item())
                 # print statistics
-            losses.append(sum_loss)
-            print(f'[{i}] loss: {sum_loss}')
-            avg_loss += sum_loss
-
-        if i % 100 == 99:  # print every 100 mini-batches
-            if verbose:
+                losses.append(loss.item())
+                sum_loss += loss.item()
+            if i % 100 == 99 and verbose:  # print every 100 mini-batches
                 print('[%d, %5d] loss: %.5f' %
-                      (epoch + 1, i + 1, avg_loss / 100))
-            avg_loss = 0.0
+                      (epoch + 1, i + 1, sum_loss / 100))
+                sum_loss = 0.0
     return losses
 
 
-def test_step(model, test_loader):
+def test_step(model, test_loader, limit=None):
     model.eval()
     test_loss = 0
     correct_cnt = 0
 
     with torch.no_grad():
         for batch_idx, (data, label) in enumerate(test_loader):
+            if limit and batch_idx >= limit:
+                break
+
             data, label = data.to(DEVICE), label.to(DEVICE)
 
-            used_mask = torch.ones(size=(data.size(dim=0), 9*9*9), dtype=torch.float16, device=DEVICE)
+            used_mask = torch.ones(size=(data.size(dim=0), 9 * 9 * 9), dtype=torch.float16, device=DEVICE)
 
             for _ in range(9 * 9):
                 x = model(data)
@@ -135,7 +138,7 @@ def test_step(model, test_loader):
 
             outputs = torch.zeros(label.size()).to(DEVICE)
             for n in range(data.size(dim=0)):
-                for pos in range(9*9):
+                for pos in range(9 * 9):
                     for chosen in range(9):
                         if data[n, chosen, pos // 9, pos % 9] == 1:
                             outputs[n, pos] = chosen + 1
@@ -145,7 +148,6 @@ def test_step(model, test_loader):
 
     test_accuracy = 100. * correct / len(test_loader.dataset) / 81
     print(f'accuracy: {test_accuracy}, correct: {correct_cnt} / {len(test_loader.dataset) * 81}')
-
 
 
 class SudokuStepDataset(Dataset):
@@ -194,9 +196,13 @@ def main():
     test_data_loader = DataLoader(test_dataset, batch_size=2)
 
     net = SudokuStepNet()
+    net.load_state_dict(torch.load('step.pt'))
 
+    net.to(DEVICE)
     train_step(net, train_data_loader)
+    torch.save(net.state_dict())
     test_step(net, test_data_loader)
+
 
 if __name__ == '__main__':
     main()
