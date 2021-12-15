@@ -129,7 +129,7 @@ Solution:
 
 <img src="example_step_solution.jpg" alt="image-20211214192537108" style="zoom:67%;" />
 
-You can also play around with our provided colab notebook file: [a link](https://github.com/ThisIsJackieShi/sudokuNet/sudokuNet.ipynb)
+You can also play around with our [provided colab notebook file](https://github.com/ThisIsJackieShi/sudokuNet/blob/main/sudoku.ipynb)
 
 ## Video
 
