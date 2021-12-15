@@ -3,7 +3,7 @@
 Jiajie Shi & Yuan Wang
 https://docs.google.com/document/d/1tsHxEA_iEM9FBZ9OcbB-oPmc2vU8F7VHZRUm2XDIwkY/edit?usp=sharing
 
-<img src="https://user-images.githubusercontent.com/47728497/146120753-c50a25ce-0b16-447b-bcd9-3c54b8e2b1fa.png">
+<img src="https://user-images.githubusercontent.com/47728497/146120753-c50a25ce-0b16-447b-bcd9-3c54b8e2b1fa.png" width="250" height="250" />
 
 ## Abstract
 
