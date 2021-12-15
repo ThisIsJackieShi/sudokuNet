@@ -3,9 +3,9 @@
 Jiajie Shi & Yuan Wang
 https://docs.google.com/document/d/1tsHxEA_iEM9FBZ9OcbB-oPmc2vU8F7VHZRUm2XDIwkY/edit?usp=sharing
 
-<img src="https://user-images.githubusercontent.com/47728497/146120753-c50a25ce-0b16-447b-bcd9-3c54b8e2b1fa.png" width="250" height="250" />
-
 ## Abstract
+
+<img src="https://user-images.githubusercontent.com/47728497/146120753-c50a25ce-0b16-447b-bcd9-3c54b8e2b1fa.png" width="250" height="250" />
 
 Sudoku is a famous game where you are given a 9x9 grid puzzle with some initial numbers and you need to fill out the blanks so that each row, column and 3x3 sub areas in the puzzle only have the number 1 to 9 appearing once within it. The general N scaled Sudoku is thought to be NP-complete(1). 
 
