@@ -1,4 +1,4 @@
-# CSE 490G1 Final Project
+# CSE 490G1 Final Project - SudokuNet
 
 Jiajie Shi & Yuan Wang
 https://docs.google.com/document/d/1tsHxEA_iEM9FBZ9OcbB-oPmc2vU8F7VHZRUm2XDIwkY/edit?usp=sharing
