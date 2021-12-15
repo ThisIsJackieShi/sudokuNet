@@ -104,9 +104,15 @@ FC999 x3: 72%
 
 Input:
 
+<img src="example_conv_input.jpg" alt="image-20211214203815887" style="zoom:67%;" />
+
 Output:
 
+<img src="example_conv_output.jpg" alt="image-20211214204041332" style="zoom:67%;" />
+
 Solution:
+
+<img src="example_conv_solution.jpg" alt="image-20211214203859956" style="zoom:67%;" />
 
 **Step-by-Step Network**
 

@@ -1,20 +1,5 @@
-import torch
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
-from torchvision import datasets
-from torchvision import transforms
-import numpy as np
-import os
-import torch.nn.functional as F
-import torch.optim as optim
-import h5py
-import sys
-import pandas as pd
+from sudoku_utils import *
 
-from sudoku_utils import sudoku2channel, channel2sudoku
-
-USE_CUDA = torch.cuda.is_available()
-DEVICE = 'cuda' if USE_CUDA else 'cpu'
 
 
 class SudokuStepNet(nn.Module):
@@ -172,22 +157,7 @@ class SudokuStepDataset(Dataset):
 
 
 def main():
-    data = np.zeros((1000000, 2, 81), np.int32)
-    for i, line in enumerate(open('sudoku.csv', 'r').read().splitlines()[1:]):
-        quiz, solution = line.split(",")
-        if i > 100:
-            break
-        for j, q_s in enumerate(zip(quiz, solution)):
-            q, s = q_s
-            data[i, 0, j] = q
-            data[i, 1, j] = s
-
-    data = data.reshape((-1, 2, 1, 9, 9))
-    train_data = data[:30, :, :, :]
-    test_data = data[30:, :, :, :]
-    #
-    print(train_data[10, 0, :, :])
-    print(train_data[10, 1, :, :])
+    train_data, test_data = get_data()
 
     train_dataset = SudokuStepDataset(train_data)
     test_dataset = SudokuStepDataset(test_data)
