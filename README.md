@@ -1,6 +1,7 @@
 # CSE 490G1 Final Project - SudokuNet
 
 Jiajie Shi & Yuan Wang
+https://www.youtube.com/watch?v=UhAodCs7R60
 
 ## Abstract
 
@@ -132,7 +133,7 @@ You can also play around with our [provided colab notebook file](https://github.
 
 ## Video
 
-a 2-3 minute long video where you explain your project and the above information
+https://www.youtube.com/watch?v=UhAodCs7R60
 
 ## References
 
