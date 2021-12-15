@@ -43,15 +43,19 @@ We also tried the fully connected layers by itself but repeated 3 times.This one
 
 
 FC 999 to 999, Conv 9-16-32-16-9: 86%
+
 ![unnamed (1)](https://user-images.githubusercontent.com/47728497/146096424-0252fcbd-0776-429f-a10f-095ded3feb28.png)
 
 Conv 9-16-32-16-9: 64%
+
 ![unnamed (2)](https://user-images.githubusercontent.com/47728497/146096425-ee32d052-afe1-4a97-b6be-17f7521e2881.png)
 
 Conv 9-16-32-16-9, FC 999 to 999: 83%
+
 ![unnamed (3)](https://user-images.githubusercontent.com/47728497/146096426-fed3e550-dfe6-42b8-9940-dcac85523815.png)
 
 FC999 x3: 72%
+
 ![unnamed (4)](https://user-images.githubusercontent.com/47728497/146096427-d5a64b34-f784-4c36-909c-1bdd1c89ca9f.png)
 
 
